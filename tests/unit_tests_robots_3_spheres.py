@@ -22,7 +22,7 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
 
         ### LOADING THE ROBOT
         pinocchio_model_dir = join(
-            dirname(dirname(dirname(str(abspath(__file__))))), "models"
+            dirname(dirname(str(abspath(__file__)))), "models"
         )
         model_path = join(pinocchio_model_dir, "franka_description/robots")
         mesh_dir = pinocchio_model_dir
