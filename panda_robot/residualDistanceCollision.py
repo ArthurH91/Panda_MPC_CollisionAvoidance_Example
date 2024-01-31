@@ -127,14 +127,14 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
 
     def calcDiff(self, data, x, u=None):
         # print(f"q : {x[:self._nq]}")
-        print('-----------')
+        # print('-----------')
 
-        self.calcDiff_numdiff(data, x)
+        # self.calcDiff_numdiff(data, x)
         # J_n = self._J
-        print(f"Rx numdiff : {self._J}")
+        # print(f"Rx numdiff : {self._J}")
         self.calcDiff_ana(data, x)
         # J_f = self._J
-        print(f"Rx ana : {self._J}")
+        # print(f"Rx ana : {self._J}")
 
         # J_diff = J_f - J_n
         # print(J_diff)

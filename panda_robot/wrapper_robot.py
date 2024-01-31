@@ -128,59 +128,59 @@ class RobotWrapper:
         collision_model_reduced_copy = self._collision_model_reduced.copy()
 
         # # Replacing the cylinders by capsules
-        # if self._capsule:
-        #     list_names_capsules = []
-        #     for i, geometry_object in enumerate(collision_model_reduced_copy.geometryObjects):
+        if self._capsule:
+            list_names_capsules = []
+            for i, geometry_object in enumerate(collision_model_reduced_copy.geometryObjects):
 
-        #         if isinstance(geometry_object.geometry, hppfcl.Sphere):
-        #             self._collision_model_reduced.removeGeometryObject(geometry_object.name)
-        #         # Only selecting the cylinders
-        #         if isinstance(geometry_object.geometry, hppfcl.Cylinder):
-        #             if (geometry_object.name[:-4] + "capsule") in list_names_capsules:
-        #                 capsule = pin.GeometryObject(
-        #                 geometry_object.name[:-4] + "capsule" + "1",
-        #                 geometry_object.parentJoint,
-        #                 geometry_object.parentFrame,
-        #                 geometry_object.placement,
-        #                 hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
-        #                 )
-        #                 capsule.meshColor = RED
-        #                 self._collision_model_reduced.addGeometryObject(capsule)
-        #                 self._collision_model_reduced.removeGeometryObject(geometry_object.name)
-        #                 list_names_capsules.append(geometry_object.name[:-4] + "capsule" + "1" )
-        #             else:
-        #                 capsule = pin.GeometryObject(
-        #                 geometry_object.name[:-4] + "capsule",
-        #                 geometry_object.parentJoint,
-        #                 geometry_object.parentFrame,
-        #                 geometry_object.placement,
-        #                 hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
-        #                 )
-        #                 capsule.meshColor = RED
-        #                 self._collision_model_reduced.addGeometryObject(capsule)
-        #                 self._collision_model_reduced.removeGeometryObject(geometry_object.name)
-        #                 list_names_capsules.append(geometry_object.name[:-4] + "capsule")
+                if isinstance(geometry_object.geometry, hppfcl.Sphere):
+                    self._collision_model_reduced.removeGeometryObject(geometry_object.name)
+                # Only selecting the cylinders
+                if isinstance(geometry_object.geometry, hppfcl.Cylinder):
+                    if (geometry_object.name[:-4] + "capsule") in list_names_capsules:
+                        capsule = pin.GeometryObject(
+                        geometry_object.name[:-4] + "capsule" + "1",
+                        geometry_object.parentJoint,
+                        geometry_object.parentFrame,
+                        geometry_object.placement,
+                        hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
+                        )
+                        capsule.meshColor = RED
+                        self._collision_model_reduced.addGeometryObject(capsule)
+                        self._collision_model_reduced.removeGeometryObject(geometry_object.name)
+                        list_names_capsules.append(geometry_object.name[:-4] + "capsule" + "1" )
+                    else:
+                        capsule = pin.GeometryObject(
+                        geometry_object.name[:-4] + "capsule",
+                        geometry_object.parentJoint,
+                        geometry_object.parentFrame,
+                        geometry_object.placement,
+                        hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
+                        )
+                        capsule.meshColor = RED
+                        self._collision_model_reduced.addGeometryObject(capsule)
+                        self._collision_model_reduced.removeGeometryObject(geometry_object.name)
+                        list_names_capsules.append(geometry_object.name[:-4] + "capsule")
 
-        # # Removing the geometry objects that aren't Capsule / Box and disabling the collisions for the finger and the camera
-        # for geometry_object in self._collision_model_reduced.geometryObjects:
-        #     # Disabling the collisions for the fingers
-        #     # weird utf-8 encoding shit
-        #     try:
-        #         if "finger" in geometry_object.name or "camera" in geometry_object.name or "support" in geometry_object.name:
-        #             geometry_object.disableCollision = True
-        #     except:
-        #         pass
-        #     # Getting rid of the cylinders in cmodel
-        #     if isinstance(geometry_object.geometry, hppfcl.Cylinder):
-        #         self._collision_model_reduced.removeGeometryObject(geometry_object.name)
+            # Removing the geometry objects that aren't Capsule / Box and disabling the collisions for the finger and the camera
+            for geometry_object in self._collision_model_reduced.geometryObjects:
+                # Disabling the collisions for the fingers
+                # weird utf-8 encoding shit
+                try:
+                    if "finger" in geometry_object.name or "camera" in geometry_object.name or "support" in geometry_object.name:
+                        geometry_object.disableCollision = True
+                except:
+                    pass
+                # Getting rid of the cylinders in cmodel
+                if isinstance(geometry_object.geometry, hppfcl.Cylinder):
+                    self._collision_model_reduced.removeGeometryObject(geometry_object.name)
 
 
-        # For some reasons, the following cylinders aren't removed with the loop from before.
-        # self._collision_model_reduced.removeGeometryObject("panda2_link0_sc_0")
-        # self._collision_model_reduced.removeGeometryObject('panda2_link7_sc_3')
-        # self._collision_model_reduced.removeGeometryObject('panda2_link5_sc_0')
-        # self._collision_model_reduced.removeGeometryObject('panda2_link4_sc_0')
-        # self._collision_model_reduced.removeGeometryObject('panda2_link2_sc_0')
+            # For some reasons, the following cylinders aren't removed with the loop from before.
+            # self._collision_model_reduced.removeGeometryObject("panda2_link0_sc_0")
+            # self._collision_model_reduced.removeGeometryObject('panda2_link7_sc_3')
+            # self._collision_model_reduced.removeGeometryObject('panda2_link5_sc_0')
+            # self._collision_model_reduced.removeGeometryObject('panda2_link4_sc_0')
+            # self._collision_model_reduced.removeGeometryObject('panda2_link2_sc_0')
 
         if self._auto_col:
             self._collision_model_reduced.addAllCollisionPairs()

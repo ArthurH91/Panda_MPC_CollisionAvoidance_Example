@@ -21,7 +21,7 @@ dt = 0.001
 
 
 ### LOADING THE ROBOT
-pinocchio_model_dir = join(dirname(dirname(dirname(str(abspath(__file__))))), "models")
+pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
 model_path = join(pinocchio_model_dir, "franka_description/robots")
 mesh_dir = pinocchio_model_dir
 urdf_filename = "franka2.urdf"
@@ -97,37 +97,37 @@ IG_OBSTACLE_R = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
 ### INITIAL CONFIG OF THE ROBOT
 INITIAL_CONFIG = pin.neutral(rmodel)
 
-# ### ADDING THE COLLISION PAIR BETWEEN A LINK OF THE ROBOT & THE OBSTACLE
-# cmodel.geometryObjects[cmodel.getGeometryId("panda2_link6_capsule")].meshColor = YELLOW_FULL
-# cmodel.geometryObjects[cmodel.getGeometryId("panda2_link5_capsule")].meshColor = RED_FULL
-# cmodel.geometryObjects[cmodel.getGeometryId("panda2_link7_capsule")].meshColor = GREEN_FULL
-# cmodel.geometryObjects[cmodel.getGeometryId("panda2_link7_capsule1")].meshColor = BLUE_FULL
-# cmodel.geometryObjects[cmodel.getGeometryId("panda2_link3_capsule")].meshColor = BLACK
+### ADDING THE COLLISION PAIR BETWEEN A LINK OF THE ROBOT & THE OBSTACLE
+cmodel.geometryObjects[cmodel.getGeometryId("panda2_link6_capsule")].meshColor = YELLOW_FULL
+cmodel.geometryObjects[cmodel.getGeometryId("panda2_link5_capsule")].meshColor = RED_FULL
+cmodel.geometryObjects[cmodel.getGeometryId("panda2_link7_capsule")].meshColor = GREEN_FULL
+cmodel.geometryObjects[cmodel.getGeometryId("panda2_link7_capsule1")].meshColor = BLUE_FULL
+cmodel.geometryObjects[cmodel.getGeometryId("panda2_link3_capsule")].meshColor = BLACK
 
-# cmodel.addCollisionPair(
-#     pin.CollisionPair(cmodel.getGeometryId("panda2_link6_capsule"), IG_OBSTACLE_F)
-# )
-# cmodel.addCollisionPair(
-#     pin.CollisionPair(cmodel.getGeometryId("panda2_link5_capsule"), IG_OBSTACLE_F)
-# )
-# cmodel.addCollisionPair(
-#     pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule"), IG_OBSTACLE_F)
-# )
-# cmodel.addCollisionPair(
-#     pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule1"), IG_OBSTACLE_F)
-# )
-# cmodel.addCollisionPair(
-#     pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule"), IG_OBSTACLE_B)
-# )
-# cmodel.addCollisionPair(
-#     pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule"), IG_OBSTACLE_L)
-# )
-# cmodel.addCollisionPair(
-#     pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule"), IG_OBSTACLE_R)
-# )
-# cmodel.addCollisionPair(
-#     pin.CollisionPair(cmodel.getGeometryId("panda2_link5_capsule"), cmodel.getGeometryId("panda2_link3_capsule"))
-# )
+cmodel.addCollisionPair(
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link6_capsule"), IG_OBSTACLE_F)
+)
+cmodel.addCollisionPair(
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link5_capsule"), IG_OBSTACLE_F)
+)
+cmodel.addCollisionPair(
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule"), IG_OBSTACLE_F)
+)
+cmodel.addCollisionPair(
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule1"), IG_OBSTACLE_F)
+)
+cmodel.addCollisionPair(
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule"), IG_OBSTACLE_B)
+)
+cmodel.addCollisionPair(
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule"), IG_OBSTACLE_L)
+)
+cmodel.addCollisionPair(
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link7_capsule"), IG_OBSTACLE_R)
+)
+cmodel.addCollisionPair(
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link5_capsule"), cmodel.getGeometryId("panda2_link3_capsule"))
+)
 
 # Generating the meshcat visualizer
 MeshcatVis = MeshcatWrapper()

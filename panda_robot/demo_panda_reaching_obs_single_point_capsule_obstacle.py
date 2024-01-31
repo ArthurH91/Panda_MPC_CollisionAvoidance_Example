@@ -20,7 +20,7 @@ dt = 0.001
 
 
 ### LOADING THE ROBOT
-pinocchio_model_dir = join(dirname(dirname(dirname(str(abspath(__file__))))), "models")
+pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
 model_path = join(pinocchio_model_dir, "franka_description/robots")
 mesh_dir = pinocchio_model_dir
 urdf_filename = "franka2.urdf"

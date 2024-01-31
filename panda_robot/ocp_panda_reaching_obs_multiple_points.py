@@ -6,7 +6,8 @@ import crocoddyl
 import pinocchio as pin
 import mim_solvers
 
-from residualDistanceCollision import ResidualCollision
+# from residualDistanceCollision import ResidualCollision
+from colmpc import ResidualDistanceCollision
 
 
 class OCPPandaReachingColWithMultipleCol:
@@ -154,9 +155,10 @@ class OCPPandaReachingColWithMultipleCol:
             # Creating the residual
 
         for col_idx in range(len(self._cmodel.collisionPairs)):
-            obstacleDistanceResidual = ResidualCollision(
-                self._state, self._cmodel, self._cdata, col_idx
-            )
+            # obstacleDistanceResidual = ResidualCollision(
+            #     self._state, self._cmodel, self._cdata, col_idx
+            # )
+            obstacleDistanceResidual = ResidualDistanceCollision(self._state, 7, self._cmodel, col_idx,6)
 
             # Creating the inequality constraint
             constraint = crocoddyl.ConstraintModelResidual(

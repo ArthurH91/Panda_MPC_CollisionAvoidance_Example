@@ -10,7 +10,7 @@ from wrapper_robot import RobotWrapper
 from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs_multiple_points import OCPPandaReachingColWithMultipleCol
 
-from ur_robot.utils import BLUE, YELLOW_FULL
+from utils import BLUE, YELLOW_FULL
 
 ### PARAMETERS
 # Number of nodes of the trajectory
@@ -70,7 +70,7 @@ cmodel.addCollisionPair(
     pin.CollisionPair(cmodel.getGeometryId("panda2_leftfinger_3"), IG_OBSTACLE)
 )
 cmodel.addCollisionPair(
-    pin.CollisionPair(cmodel.getGeometryId("panda2_link5_sc_4")), IG_OBSTACLE
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link5_sc_4"), IG_OBSTACLE)
 )
 cdata = cmodel.createData()
 
