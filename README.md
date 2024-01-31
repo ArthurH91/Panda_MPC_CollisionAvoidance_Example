@@ -9,7 +9,7 @@ It has several dependencies :
 ## For OCP & MPC scripts : 
 
 - HPPFCL : https://github.com/humanoid-path-planner/hpp-fcl/tree/hppfcl3x **(HPPFCL3X BRANCH REQUIERED)** for collision computations.
-- Pinocchio: https://github.com/stack-of-tasks/pinocchio fast rigid body dynamics.
+- Pinocchio: https://github.com/stack-of-tasks/pinocchio fast rigid body dynamics. **(if you have pinocchio3, switch to the pinocchio3 branch)**
 - Crocoddyl: https://github.com/loco-3d/crocoddyl framework for the solver.
 - MiM Solvers: https://github.com/machines-in-motion/mim_solvers solver.
 - Mim Robots: https://github.com/machines-in-motion/mim_robots pybullet env.
