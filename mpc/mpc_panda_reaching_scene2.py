@@ -1,5 +1,5 @@
 """
-Example script : MPC simulation with KUKA arm 
+Example script : MPC simulation with panda arm 
 static target reaching task
 
 """

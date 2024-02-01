@@ -1,5 +1,5 @@
 """
-Example script : MPC simulation with KUKA arm 
+Example script : MPC simulation with panda arm 
 static target reaching task
 
 """
@@ -18,8 +18,7 @@ from panda_robot_loader import PandaRobot
 from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs import OCPPandaReachingColWithMultipleCol
 
-from utils import BLUE, YELLOW_FULL, RED_FULL, GREEN_FULL, BLUE_FULL, BLACK
-
+import matplotlib.pyplot as plt
 import pybullet as p
 
 # # # # # # # #
@@ -29,7 +28,7 @@ import pybullet as p
 
 WITH_TRAJECTORY_WARMSTART = False
 WITH_WARMSTART_WHEN_CHANGING_TARGET = False
-WITH_PLOTS = True
+WITH_PLOTS = False
 WITH_SAVING_RESULTS = False
 
 # # # # # # # # # # # # # # # # # # #
@@ -85,12 +84,12 @@ robot_simulator.pin_robot.collision_model.addCollisionPair(
         robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
     )
 )
-# robot_simulator.pin_robot.collision_model.addCollisionPair(
-#     pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_3"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
-# )
-# robot_simulator.pin_robot.collision_model.addCollisionPair(
-#     pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_4"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
-# )
+robot_simulator.pin_robot.collision_model.addCollisionPair(
+    pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_3"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
+)
+robot_simulator.pin_robot.collision_model.addCollisionPair(
+    pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_4"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
+)
 list_col_pairs = []
 for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
     list_col_pairs.append([col_pair.first, col_pair.second])
@@ -107,10 +106,11 @@ TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.4, 1.5]))
 TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 1.5]))
 
 # OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
-OBSTACLE_POSE = robot_simulator.pin_robot.collision_model.geometryObjects[
-    robot_simulator.pin_robot.collision_model.getGeometryId("obstacle")
-].placement
+OBSTACLE_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
 OBSTACLE_RADIUS = 1.0e-1
+
+OBSTACLE_POSE2 = pin.SE3.Identity()
+OBSTACLE_POSE2.translation = OBSTACLE_POSE1.translation + np.array([0,0,-.1])
 
 dt = 2e-2
 T = 8
@@ -124,7 +124,7 @@ WEIGHT_xREG=1e-2
 WEIGHT_xREG_TERM=1e-2
 WEIGHT_uREG=1e-4
 max_qp_iters= 25
-callbacks=True
+callbacks=False
 safety_threshhold = 1e-2
 
 # vis.display(robot_simulator.pin_robot.)
@@ -205,7 +205,7 @@ ocp_params["active_costs"] = ddp.problem.runningModels[
 sim_params = {}
 sim_params["sim_freq"] = int(1.0 / env.dt)
 sim_params["mpc_freq"] = 1000
-sim_params["T_sim"] = 4.0
+sim_params["T_sim"] = 12.0
 log_rate = 100
 
 
@@ -219,8 +219,8 @@ mpc_utils.display_ball(
     TARGET_POSE2.translation, RADIUS=0.5e-1, COLOR=[1.0, 0.0, 0.0, 0.6]
 )
 
-mpc_utils.display_ball(
-    OBSTACLE_POSE.translation, RADIUS=OBSTACLE_RADIUS, COLOR=[1.0, 1.0, 0.0, 0.6]
+obs_id = mpc_utils.display_ball(
+    OBSTACLE_POSE1.translation, RADIUS=OBSTACLE_RADIUS, COLOR=[1.0, 1.0, 0.0, 0.6]
 )
 
 print(f"sim_data['N_sim'] : {sim_data['N_sim']}")
@@ -228,9 +228,21 @@ time_calc = []
 u_list = []
 # Simulate
 mpc_cycle = 0
+OBSTACLE_POSE = OBSTACLE_POSE1
 TARGET_POSE = TARGET_POSE1
-for i in range(sim_data["N_sim"]):
+for i in range(sim_data["N_sim"]):    
     if i % 2000 == 0 and i != 0:
+        if i % 4000 ==0:
+            p.removeBody(obs_id)
+            if np.linalg.norm(OBSTACLE_POSE.translation) == np.linalg.norm(OBSTACLE_POSE1.translation):
+                OBSTACLE_POSE = OBSTACLE_POSE2
+            else:
+                OBSTACLE_POSE= OBSTACLE_POSE1
+            print(f"after : {OBSTACLE_POSE.translation}")
+            obs_id = mpc_utils.display_ball(
+    OBSTACLE_POSE.translation, RADIUS=OBSTACLE_RADIUS, COLOR=[1.0, 1.0, 0.0, 0.6]
+)           
+            robot_simulator.pin_robot.collision_model.geometryObjects[robot_simulator.pin_robot.collision_model.getGeometryId("obstacle")].placement = OBSTACLE_POSE
         ### Changing from target pose 1 to target pose 2 or inversely
         if TARGET_POSE == TARGET_POSE1:
             TARGET_POSE = TARGET_POSE2
@@ -346,3 +358,13 @@ if WITH_PLOTS:
         PLOT_PREDICTIONS=True,
         pred_plot_sampling=int(sim_params["mpc_freq"] / 10),
     )
+
+def moving_average(a, n=3):
+    ret = np.cumsum(a, dtype=float)
+    ret[n:] = ret[n:] - ret[:-n]
+    return ret[n - 1:] / n
+    
+
+time_calc_avg = moving_average(time_calc)
+plt.plot(time_calc)
+plt.show()
