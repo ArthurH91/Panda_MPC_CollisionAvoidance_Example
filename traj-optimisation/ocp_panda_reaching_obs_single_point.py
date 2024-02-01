@@ -160,7 +160,7 @@ class OCPPandaReachingColWithSingleCol:
         #     self._state, self._cmodel, self._cdata, 0
         # )
         # print("obstacle residual : ")
-        obstacleDistanceResidual2 = ResidualDistanceCollision(self._state, 7, self._cmodel, 0,6)
+        obstacleDistanceResidual2 = ResidualDistanceCollision(self._state, 7, self._cmodel, 0)
         
         # Cost for collision
         # xlb = np.array([0.02])
