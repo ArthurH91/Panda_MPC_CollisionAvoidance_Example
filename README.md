@@ -6,7 +6,7 @@ It has several dependencies :
 
 # Dependencies 
 
-## For OCP & MPC scripts : 
+## For OCP & MPC scripts: 
 
 - HPPFCL : https://github.com/humanoid-path-planner/hpp-fcl/tree/hppfcl3x **(HPPFCL3X BRANCH REQUIERED)** for collision computations.
 - Pinocchio: https://github.com/stack-of-tasks/pinocchio fast rigid body dynamics. **(if you have pinocchio3, switch to the pinocchio3 branch)**
@@ -15,8 +15,9 @@ It has several dependencies :
 - Mim Robots: https://github.com/machines-in-motion/mim_robots pybullet env.
 - Colmpc: https://github.com/ArthurH91/colmpc collision residual for the solver.
 
-## For visualization : 
+## For visualization: 
 - Meshcat: https://github.com/meshcat-dev/meshcat
+- Pybullet: https://pybullet.org/wordpress/
 
 # Installations
 
@@ -36,7 +37,7 @@ To try the examples, create a meshcat server using a terminal and the following 
 
 ## For the MPC part:
 
-Simply run ```python mpc/mpc_kuka_reaching_scene1.py```
+Simply run ```python mpc/mpc_panda_reaching_scene1.py```
 
 As the code is still in developpement, the code is constantly moving and sometimes, examples do not work. Hence, do not hesitate to contact me at ahaffemaye@laas.fr. 
 
