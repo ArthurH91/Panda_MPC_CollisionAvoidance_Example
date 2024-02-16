@@ -52,15 +52,19 @@ def panda_loader():
 
 def compute_1p_dot_1(q):
     pin.computeAllTerms(rmodel, rdata, q, vq)
-    p1 = rdata.oMi[joint1_idx].rotation.transpose()*(cp1 - rdata.oMi[joint1_idx].translation)
+    cp1_se3 = pin.SE3.Identity()
+    cp1_se3.translation = cp1
+    p1 = (rdata.oMi[joint1_idx].inverse() * cp1_se3).translation
     v1 = rdata.v[joint1_idx].linear
-    rw1 = np.matmul(p1,rdata.v[joint1_idx].angular)
+    rw1 = np.cross(p1,rdata.v[joint1_idx].angular)
     return v1 + rw1
 
 def compute_1p_dot_1_deriv(q):
     pin.computeAllTerms(rmodel, rdata, q, vq)
-    p1 = rdata.oMi[joint1_idx].rotation.transpose()*(cp1 - rdata.oMi[joint1_idx].translation)
-    jvd = pin.getJointVelocityDerivatives(rmodel, rdata, joint1_idx, pin.LOCAL)
+    cp1_se3 = pin.SE3.Identity()
+    cp1_se3.translation = cp1
+    p1 = (rdata.oMi[joint1_idx].inverse() * cp1_se3).translation
+    jvd = pin.getJointVelocityDerivatives(rmodel, rdata, joint1_idx, pin.WORLD)
     v_dot = jvd[0][:3]
     w_dot = jvd[0][3:]
     return v_dot + np.matmul(p1, w_dot)
