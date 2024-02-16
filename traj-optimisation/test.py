@@ -64,10 +64,11 @@ def compute_1p_dot_1_deriv(q):
     cp1_se3 = pin.SE3.Identity()
     cp1_se3.translation = cp1
     p1 = (rdata.oMi[joint1_idx].inverse() * cp1_se3).translation
-    jvd = pin.getJointVelocityDerivatives(rmodel, rdata, joint1_idx, pin.WORLD)
+    jvd = pin.getJointVelocityDerivatives(rmodel, rdata, joint1_idx, pin.LOCAL)
     v_dot = jvd[0][:3]
     w_dot = jvd[0][3:]
-    return v_dot + np.matmul(p1, w_dot)
+    dp_dq = pin.getJointJacobian(rmodel, rdata, joint1_idx, pin.LOCAL)[:3]
+    return v_dot - np.matmul(skew(rdata.v[joint1_idx].angular), dp_dq) + np.matmul(skew(p1), w_dot)
 
 def numdiff(f, x, eps=1e-8):
     """Estimate df/dx at x with finite diff of step eps
@@ -94,6 +95,12 @@ def numdiff(f, x, eps=1e-8):
         res.append(copy.copy(f(xc) - f0) / eps)
         xc[i] = x[i]
     return np.array(res).T
+
+def skew(x):
+    return np.array([[0, -x[2], x[1]],
+                     [x[2], 0, -x[0]],
+                     [-x[1], x[0], 0]])
+
 
 if __name__ =="__main__":
     
