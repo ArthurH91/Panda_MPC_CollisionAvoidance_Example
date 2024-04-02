@@ -163,12 +163,7 @@ class OCPPandaReachingColWithMultipleColSoft:
             #     self._state, self._cmodel, self._cdata, col_idx
             # )
             obstacleDistanceResidual = ResidualDistanceCollision(self._state, 7, self._cmodel, col_idx)
-
-            xlb = np.array([0.02])
-            xlb = 0.01
-            xub = np.array([np.inf])
-            # bounds = crocoddyl.ActivationBounds(xlb, xub, 1.0)
-            xLimitActivation = crocoddyl.ActivationModel2NormBarrier(1, xlb)
+            xLimitActivation = crocoddyl.ActivationModel2NormBarrier(1, self._SAFETY_THRESHOLD)
             obstacleDistanceCost = crocoddyl.CostModelResidual(
                 self._state,xLimitActivation ,obstacleDistanceResidual
             )
@@ -223,18 +218,18 @@ class OCPPandaReachingColWithMultipleColSoft:
         )
         # Create solver + callbacks
         # Define mim solver with inequalities constraints
-        ddp = mim_solvers.SolverSQP(problem)
+        ddp = mim_solvers.SolverCSQP(problem)
         
         # # Merit function
         # ddp.use_filter_line_search = False
         
         # # Parameters of the solver
-        # ddp.termination_tolerance = 1e-3
-        # ddp.max_qp_iters =self._max_qp_iters
-        # ddp.eps_abs = 1e-6
-        # ddp.eps_rel = 0
+        ddp.termination_tolerance = 1e-3
+        ddp.max_qp_iters =self._max_qp_iters
+        ddp.eps_abs = 1e-6
+        ddp.eps_rel = 0
         
-        # ddp.with_callbacks = self._callbacks
+        ddp.with_callbacks = self._callbacks
         # ddp = crocoddyl.SolverFDDP(problem)
 
         return ddp

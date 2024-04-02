@@ -34,7 +34,7 @@ WITH_SAVING_RESULTS = True
 # Simulation environment
 env = BulletEnvWithGround(p.GUI, dt=1e-3)
 # Robot simulator
-robot_simulator = PandaRobot(scene=2)
+robot_simulator = PandaRobot(scene=1)
 env.add_robot(robot_simulator)
 
 # Extract robot model
@@ -80,12 +80,7 @@ robot_simulator.pin_robot.collision_model.addCollisionPair(
         robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
     )
 )
-# robot_simulator.pin_robot.collision_model.addCollisionPair(
-#     pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_3"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
-# )
-# robot_simulator.pin_robot.collision_model.addCollisionPair(
-#     pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_4"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
-# )
+
 list_col_pairs = []
 for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
     list_col_pairs.append([col_pair.first, col_pair.second])
@@ -95,14 +90,9 @@ for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
 ###  OCP CONSTANTS  ###
 # # # # # # # # # # # #
 
-# TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.4, 1.5]))
-# TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 1.5]))
+TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.4, 1.5]))
+TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 1.5]))
 
-
-TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0.00833, -0.4, 1.5]))
-TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 0.95]))
-
-# OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
 OBSTACLE_POSE = robot_simulator.pin_robot.collision_model.geometryObjects[
     robot_simulator.pin_robot.collision_model.getGeometryId("obstacle")
 ].placement
@@ -111,7 +101,7 @@ OBSTACLE_RADIUS = 1.0e-1
 dt = 2e-2
 T = 8
 
-max_iter = 10  # Maximum iterations of the solver
+max_iter = 50  # Maximum iterations of the solver
 max_qp_iters = 25  # Maximum iterations for solving each qp solved in one iteration of the solver
 
 WEIGHT_GRIPPER_POSE=1e2
@@ -119,7 +109,7 @@ WEIGHT_GRIPPER_POSE_TERM=1e2
 WEIGHT_xREG=1e-1
 WEIGHT_xREG_TERM=1e-2
 WEIGHT_uREG=1e-4
-WEIGHT_COLLISION = 10
+WEIGHT_COLLISION = 100
 max_qp_iters= 100
 callbacks=False
 safety_threshhold = 1e-2

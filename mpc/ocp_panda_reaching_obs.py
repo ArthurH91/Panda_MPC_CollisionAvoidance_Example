@@ -113,10 +113,6 @@ class OCPPandaReachingColWithMultipleCol:
         # Shape 2 parent joint
         self._shape2_parentJoint = self._shape2.parentJoint
 
-        # Checking that shape 1 is belonging to the robot & shape 2 is the obstacle
-        assert not "obstacle" in self._shape1.name
-        assert "obstacle" in self._shape2.name
-
     def __call__(self) -> Any:
         "Setting up croccodyl OCP"
 

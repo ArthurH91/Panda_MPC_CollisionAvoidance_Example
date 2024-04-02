@@ -66,7 +66,7 @@ def display_ball(p_des, RADIUS=.05, COLOR=[1.,1.,1.,1.]):
 
     return ballId
 
-def display_box(p_des, size=[0.1, 0.1, 0.1], color=[1., 1., 1., 1.]):
+def display_box(M, size=[0.1, 0.1, 0.1], color=[1., 1., 1., 1.]):
     '''
     Create a box visual object in PyBullet (no collision)
     Transformed because reference p_des is in pinocchio.WORLD frame, which is different
@@ -77,7 +77,6 @@ def display_box(p_des, size=[0.1, 0.1, 0.1], color=[1., 1., 1., 1.]):
         color  : color of the box
     '''
     # pose of the box in bullet WORLD
-    M = pin.SE3(np.eye(3), p_des)  # ok for talos reduced since pin.W = bullet.W but careful with talos_arm if base is moved
     quat = pin.SE3ToXYZQUAT(M)
     
     half_extents = [s / 2.0 for s in size]
@@ -96,7 +95,7 @@ def display_box(p_des, size=[0.1, 0.1, 0.1], color=[1., 1., 1., 1.]):
     
     return boxId
 
-def display_capsule(p_des, length=1.0, radius=0.1, color=[1., 1., 1., 1.]):
+def display_capsule(M, length=1.0, radius=0.1, color=[1., 1., 1., 1.]):
     '''
     Create a capsule visual object in PyBullet (no collision)
     Transformed because reference p_des is in pinocchio.WORLD frame, which is different
@@ -108,7 +107,6 @@ def display_capsule(p_des, length=1.0, radius=0.1, color=[1., 1., 1., 1.]):
         color  : color of the capsule
     '''
     # pose of the capsule in bullet WORLD
-    M = pin.SE3(np.eye(3), p_des)  # adjust as needed for your specific scenario
     quat = pin.SE3ToXYZQUAT(M)
 
     visualCapsuleId = p.createVisualShape(shapeType=p.GEOM_CAPSULE,

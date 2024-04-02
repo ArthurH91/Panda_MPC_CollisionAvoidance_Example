@@ -1,6 +1,6 @@
 """
 Example script : MPC simulation with panda arm 
-static target reaching task
+static target reaching task. Highlights the limits of MPC without proper warmstart.
 
 """
 
@@ -38,7 +38,7 @@ WITH_SAVING_RESULTS = False
 # Simulation environment
 env = BulletEnvWithGround(p.GUI, dt=1e-3)
 # Robot simulator
-robot_simulator = PandaRobot(scene=2)
+robot_simulator = PandaRobot(scene=3)
 env.add_robot(robot_simulator)
 
 # Extract robot model
@@ -231,9 +231,9 @@ for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
 ###  OCP CONSTANTS  ###
 # # # # # # # # # # # #
 
-TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0.0, -0.3, 0.9]))
+TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0.0, -0.3, 0.8]))
 # TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 0.95]))
-TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0.0, 0.2, 0.85]))
+TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0.0, 0.2, 0.8]))
 
 # OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
 OBSTACLE_POSE1 = robot_simulator.pin_robot.collision_model.geometryObjects[
@@ -248,17 +248,6 @@ OBSTACLE_POSE3 = robot_simulator.pin_robot.collision_model.geometryObjects[
 OBSTACLE_POSE4 = robot_simulator.pin_robot.collision_model.geometryObjects[
     robot_simulator.pin_robot.collision_model.getGeometryId("obstacle4")
 ].placement
-OBSTACLE_RADIUS = robot_simulator.pin_robot.collision_model.geometryObjects[
-    robot_simulator.pin_robot.collision_model.getGeometryId("obstacle1")
-].geometry.radius
-
-OBSTACLE_LENGTH = (
-    2
-    * robot_simulator.pin_robot.collision_model.geometryObjects[
-        robot_simulator.pin_robot.collision_model.getGeometryId("obstacle1")
-    ].geometry.halfLength
-)
-
 
 dt = 2e-2
 T = 8
@@ -367,29 +356,34 @@ mpc_utils.display_ball(
     TARGET_POSE2.translation, RADIUS=0.5e-1, COLOR=[1.0, 0.0, 0.0, 0.6]
 )
 
-mpc_utils.display_capsule(
+mpc_utils.display_box(
     OBSTACLE_POSE1,
-    length=OBSTACLE_LENGTH,
-    radius=OBSTACLE_RADIUS,
+    size = robot_simulator.pin_robot.collision_model.geometryObjects[
+    robot_simulator.pin_robot.collision_model.getGeometryId("obstacle1")
+].geometry.halfSide *2,
     color=[1.0, 1.0, 0.0, 0.6],
 )
 
-mpc_utils.display_capsule(
+mpc_utils.display_box(
     OBSTACLE_POSE2,
-    length=OBSTACLE_LENGTH,
-    radius=OBSTACLE_RADIUS,
+    size = robot_simulator.pin_robot.collision_model.geometryObjects[
+    robot_simulator.pin_robot.collision_model.getGeometryId("obstacle2")
+].geometry.halfSide *2,
     color=[1.0, 1.0, 0.0, 0.6],
 )
-mpc_utils.display_capsule(
+
+mpc_utils.display_box(
     OBSTACLE_POSE3,
-    length=OBSTACLE_LENGTH,
-    radius=OBSTACLE_RADIUS,
+    size = robot_simulator.pin_robot.collision_model.geometryObjects[
+    robot_simulator.pin_robot.collision_model.getGeometryId("obstacle3")
+].geometry.halfSide *2,
     color=[1.0, 1.0, 0.0, 0.6],
 )
-mpc_utils.display_capsule(
+mpc_utils.display_box(
     OBSTACLE_POSE4,
-    length=OBSTACLE_LENGTH,
-    radius=OBSTACLE_RADIUS,
+    size = robot_simulator.pin_robot.collision_model.geometryObjects[
+    robot_simulator.pin_robot.collision_model.getGeometryId("obstacle4")
+].geometry.halfSide *2,
     color=[1.0, 1.0, 0.0, 0.6],
 )
 

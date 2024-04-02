@@ -86,18 +86,99 @@ def load_pinocchio_robot_panda(scene, capsule = False, obstacle_shape = "sphere"
         )
         ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
     elif scene ==2:
-        ### CREATING THE SPHERE ON THE UNIVERSE
-        OBSTACLE_RADIUS = 1.5e-1
-        OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.2]))
-        OBSTACLE = hppfcl.Sphere(OBSTACLE_RADIUS)
-        OBSTACLE_GEOM_OBJECT = pin.GeometryObject(
-            "obstacle",
-            rmodel.getFrameId("universe"),
-            rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
-            OBSTACLE,
-            OBSTACLE_POSE
+        OBSTACLE_RADIUS = 1.0e-1
+        OBSTACLE_HALFLENGTH = 0.25e-0
+        OBSTACLE_HEIGHT = 0.85
+        OBSTACLE1_POSE = pin.SE3(pin.utils.rotate("y", np.pi/2), np.array([-0.0, 0.0, OBSTACLE_HEIGHT]))
+        OBSTACLE1 = hppfcl.Capsule(OBSTACLE_RADIUS, OBSTACLE_HALFLENGTH)
+        OBSTACLE1_GEOM_OBJECT = pin.GeometryObject(
+        "obstacle1",
+        rmodel.getFrameId("universe"),
+        rmodel.frames[rmodel.getFrameId("universe")].parent,
+        OBSTACLE1,
+        OBSTACLE1_POSE,
         )
-        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE1_GEOM_OBJECT)
+        OBSTACLE2_POSE = pin.SE3(pin.utils.rotate("y", np.pi/2), np.array([-0.0, 0.4, OBSTACLE_HEIGHT]))
+        OBSTACLE2 = hppfcl.Capsule(OBSTACLE_RADIUS, OBSTACLE_HALFLENGTH)
+        OBSTACLE2_GEOM_OBJECT = pin.GeometryObject(
+        "obstacle2",
+        rmodel.getFrameId("universe"),
+        rmodel.frames[rmodel.getFrameId("universe")].parent,
+        OBSTACLE2,
+        OBSTACLE2_POSE,
+        )
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE2_GEOM_OBJECT)
+        
+        OBSTACLE3_POSE = pin.SE3(pin.utils.rotate("y", np.pi/2) @ pin.utils.rotate("x", np.pi/2) , np.array([0.25, 0.2, OBSTACLE_HEIGHT]))
+        OBSTACLE3 = hppfcl.Capsule(OBSTACLE_RADIUS, OBSTACLE_HALFLENGTH)
+        OBSTACLE3_GEOM_OBJECT = pin.GeometryObject(
+        "obstacle3",
+        rmodel.getFrameId("universe"),
+        rmodel.frames[rmodel.getFrameId("universe")].parent,
+        OBSTACLE3,
+        OBSTACLE3_POSE,
+        )
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE3_GEOM_OBJECT)
+        
+        OBSTACLE4_POSE = pin.SE3(pin.utils.rotate("y", np.pi/2) @ pin.utils.rotate("x", np.pi/2) , np.array([-0.25, 0.2, OBSTACLE_HEIGHT]))
+        OBSTACLE4 = hppfcl.Capsule(OBSTACLE_RADIUS, OBSTACLE_HALFLENGTH)
+        OBSTACLE4_GEOM_OBJECT = pin.GeometryObject(
+        "obstacle4",
+        rmodel.getFrameId("universe"),
+        rmodel.frames[rmodel.getFrameId("universe")].parent,
+        OBSTACLE4,
+        OBSTACLE4_POSE,
+        )
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE4_GEOM_OBJECT)
+        
+    elif scene ==3: 
+        OBSTACLE_HEIGHT = 0.85 
+        OBSTACLE_X = 2.0e-1
+        OBSTACLE_Y = 0.5e-2
+        OBSTACLE_Z = 0.5
+        OBSTACLE1_POSE = pin.SE3(pin.utils.rotate("y", np.pi/2), np.array([-0.0, 0.0, OBSTACLE_HEIGHT]))
+        OBSTACLE1 = hppfcl.Box(OBSTACLE_X, OBSTACLE_Y,OBSTACLE_Z)
+        OBSTACLE1_GEOM_OBJECT = pin.GeometryObject(
+        "obstacle1",
+        rmodel.getFrameId("universe"),
+        rmodel.frames[rmodel.getFrameId("universe")].parent,
+        OBSTACLE1,
+        OBSTACLE1_POSE,
+        )
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE1_GEOM_OBJECT)
+        OBSTACLE2_POSE = pin.SE3(pin.utils.rotate("y", np.pi/2), np.array([-0.0, 0.45, OBSTACLE_HEIGHT]))
+        OBSTACLE2 = hppfcl.Box(OBSTACLE_X, OBSTACLE_Y,OBSTACLE_Z)
+        OBSTACLE2_GEOM_OBJECT = pin.GeometryObject(
+        "obstacle2",
+        rmodel.getFrameId("universe"),
+        rmodel.frames[rmodel.getFrameId("universe")].parent,
+        OBSTACLE2,
+        OBSTACLE2_POSE,
+        )
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE2_GEOM_OBJECT)
+        
+        OBSTACLE3_POSE = pin.SE3(pin.utils.rotate("y", np.pi/2) @ pin.utils.rotate("x", np.pi/2) , np.array([0.25, 0.225, OBSTACLE_HEIGHT]))
+        OBSTACLE3 = hppfcl.Box(OBSTACLE_X, OBSTACLE_Y,OBSTACLE_Z)
+        OBSTACLE3_GEOM_OBJECT = pin.GeometryObject(
+        "obstacle3",
+        rmodel.getFrameId("universe"),
+        rmodel.frames[rmodel.getFrameId("universe")].parent,
+        OBSTACLE3,
+        OBSTACLE3_POSE,
+        )
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE3_GEOM_OBJECT)
+        
+        OBSTACLE4_POSE = pin.SE3(pin.utils.rotate("y", np.pi/2) @ pin.utils.rotate("x", np.pi/2) , np.array([-0.25, 0.225, OBSTACLE_HEIGHT]))
+        OBSTACLE4 = hppfcl.Box(OBSTACLE_X, OBSTACLE_Y,OBSTACLE_Z)
+        OBSTACLE4_GEOM_OBJECT = pin.GeometryObject(
+        "obstacle4",
+        rmodel.getFrameId("universe"),
+        rmodel.frames[rmodel.getFrameId("universe")].parent,
+        OBSTACLE4,
+        OBSTACLE4_POSE,
+        )
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE4_GEOM_OBJECT)
     else: 
         if "sphere" == obstacle_shape:
             OBSTACLE = hppfcl.Sphere(obstacle_dim)
@@ -129,33 +210,6 @@ def load_pinocchio_robot_panda(scene, capsule = False, obstacle_shape = "sphere"
                 obstacle_pose,
             )
             ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)            
-    # ### CREATING THE SPHERE ON THE END EFFECTOR
-    # SPHERE2_RADIUS = 1.5e-1
-    # SPHERE2_POSE = pin.SE3.Identity()
-    # SPHERE2_POSE.translation = np.array([0.2, 0.0, 0.0])
-    # SPHERE2 = hppfcl.Sphere(SPHERE2_RADIUS)
-    # SPHERE2_GEOM_OBJECT = pin.GeometryObject(
-    #     "SPHERE2",
-    #     rmodel.getFrameId("panda2_leftfinger"),
-    #     rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parentJoint,
-    #     SPHERE2,
-    #     SPHERE2_POSE,
-    # )
-    # ID_SPHERE2 = cmodel.addGeometryObject(SPHERE2_GEOM_OBJECT)
-
-    # ### CREATING THE SPHERE ON THE ROBOT
-    # SPHERE3_RADIUS = 1.5e-1
-    # SPHERE3_POSE = pin.SE3.Identity()
-    # SPHERE3_POSE.translation = np.array([0.0, 0.1, 0.2])
-    # SPHERE3 = hppfcl.Sphere(SPHERE3_RADIUS)
-    # SPHERE3_GEOM_OBJECT = pin.GeometryObject(
-    #     "SPHERE3",
-    #     rmodel.getFrameId("panda2_link3_sc_joint"),
-    #     rmodel.frames[rmodel.getFrameId("panda2_link3_sc_joint")].parentJoint,
-    #     SPHERE3,
-    #     SPHERE3_POSE,
-    # )
-    # ID_SPHERE3 = cmodel.addGeometryObject(SPHERE3_GEOM_OBJECT)
 
     robot_reduced = pin.robot_wrapper.RobotWrapper(rmodel, cmodel, vmodel)  
 

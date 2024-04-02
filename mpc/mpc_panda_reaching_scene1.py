@@ -17,7 +17,6 @@ from mim_robots.pybullet.env import BulletEnvWithGround
 from panda_robot_loader import PandaRobot
 from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs import OCPPandaReachingColWithMultipleCol
-
 import matplotlib.pyplot as plt
 import pybullet as p
 
@@ -205,7 +204,7 @@ ocp_params["active_costs"] = ddp.problem.runningModels[
 sim_params = {}
 sim_params["sim_freq"] = int(1.0 / env.dt)
 sim_params["mpc_freq"] = 1000
-sim_params["T_sim"] = 12.0
+sim_params["T_sim"] = 10.0
 log_rate = 100
 
 
@@ -368,3 +367,4 @@ def moving_average(a, n=3):
 time_calc_avg = moving_average(time_calc)
 plt.plot(time_calc)
 plt.show()
+
